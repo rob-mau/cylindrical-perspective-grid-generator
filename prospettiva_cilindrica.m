@@ -5,11 +5,11 @@ clear all
 close all
 
 % parametri griglia cubica
-% la griglia cubica Ë costituita da 3 famiglie di segmenti tra loro
-% paralleli ed equidistanziati (distanza di 1 "unit‡"). Le famiglie sono
-% tra loro mutuamente ortogonali. Ogni segmento Ë rappresentato con
+% la griglia cubica √® costituita da 3 famiglie di segmenti tra loro
+% paralleli ed equidistanziati (distanza di 1 "unit√†"). Le famiglie sono
+% tra loro mutuamente ortogonali. Ogni segmento √® rappresentato con
 % "num_points" punti.
-half_len = 2;       % semi-lunghezza del lato del cubo ("unit‡" intere!)
+half_len = 2;       % semi-lunghezza del lato del cubo ("unit√†" intere!)
 num_points = 400;   % numero di punti in ciascun segmento
 
 % parametri geometrici
@@ -26,7 +26,7 @@ radius = 1;
 n = n / norm(n);
 I = eye(3);
 A = n * n.';    % proiettore ortogonale sullo span{n}
-N = screw(n);   % matrice antisimmetrica generata da n 
+N = skew(n);   % matrice antisimmetrica generata da n 
 % formula di Rodrigues
 R = A + (I - A) * cos(angle) + N * sin(angle);
 % matrice omogenea che codifica la roto-traslazione
@@ -226,10 +226,10 @@ plot(-squeeze(pz_d(max_index,max_index,1,:)), ...
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Definizione Funzioni
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Funzione out = screw(in):
+% Funzione out = skew(in):
 %   in:  vettore tridimensionale
 %   out: matrice antisimmetrica 3*3
-function out = screw(in)
+function out = skew(in)
     a = in(1);
     b = in(2);
     c = in(3);

@@ -9,27 +9,27 @@ clc;
 % The cubic grid consists of 3 sets of mutually parallel and equidistant 
 % segments (spaced by 1 "unit"). The sets are mutually orthogonal. 
 % Each segment is represented by "num_points" points.
-half_len = 2;       % half-length of the cube side (integer number)
+half_length = 2;    % half-length of the cube side (integer number)
 num_points = 400;   % number of points in each segment
 
 % Geometric Parameters
 % position of the center of the cubic grid
-d = [0; 0; 0];  
-% rotation describing the orientation of the grid (axis-angle parameters)
-n = [1; 1; 1];  % rotation axis
-angle = pi/8; 	% rotation angle
+position = [0; 0; 0];  
+% orientation of the grid (axis-angle parametrization)
+rot_axis = [1; 1; 1];  % rotation axis
+rot_angle = pi/8; 	   % rotation angle
 % radius of the cylindrical surface
 radius = 1; 
 
 % transformation matrix T between two arbitrarily oriented frames
 % (homogeneous matrix)
-n = n / norm(n);
-S = skew(n);
+S = skew(rot_axis / norm(rot_axis));
 I = eye(3);
 % Rodrigues' rotation formula
-R = I + sin(angle) * S + (1 - cos(angle)) * S^2;
+orientation = I + sin(rot_angle) * S + (1 - cos(rot_angle)) * S^2;
+
 % homogeneous matrix encoding the rotation and translation
-T = [R, d; [0, 0, 0, 1]];
+T = [orientation, position; [0, 0, 0, 1]];
 
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Matrix Initialization
@@ -37,7 +37,7 @@ T = [R, d; [0, 0, 0, 1]];
 % The letters x, y, z identify each of the 3 families of segments 
 % that are mutually orthogonal composing the cubic grid 
 % (aligned along the x, y, and z axes, respectively)
-max_index  = 2 * half_len + 1;
+max_index  = 2 * half_length + 1;
 
 % families of segments aligned with the coordinate axes (subscript a)
 % initialization
@@ -69,26 +69,26 @@ pz_d = zeros(max_index, max_index, 2, num_points);
 %  Matrix Computation
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % families of segments aligned with the coordinate axes (subscript a)
-step = 2 * half_len / (num_points - 1);
+step = 2 * half_length / (num_points - 1);
 
-x = -half_len:step:half_len;
-y = -half_len:step:half_len;
-z = -half_len:step:half_len;
+x = -half_length:step:half_length;
+y = -half_length:step:half_length;
+z = -half_length:step:half_length;
 
 for i = 1:max_index
     for j = 1:max_index
         px_a(i,j,:,:) = [x; 
-                         ones(1, num_points) * ((i - 1) - half_len); 
-                         ones(1, num_points) * ((j - 1) - half_len); 
+                         ones(1, num_points) * ((i - 1) - half_length); 
+                         ones(1, num_points) * ((j - 1) - half_length); 
                          ones(1, num_points)];
 
-        py_a(i,j,:,:) = [ones(1, num_points) * ((j - 1) - half_len);
+        py_a(i,j,:,:) = [ones(1, num_points) * ((j - 1) - half_length);
                          y;
-                         ones(1, num_points) * ((i - 1) - half_len); 
+                         ones(1, num_points) * ((i - 1) - half_length); 
                          ones(1, num_points)];
 
-        pz_a(i,j,:,:) = [ones(1, num_points) * ((i - 1) - half_len); 
-                         ones(1, num_points) * ((j - 1) - half_len);
+        pz_a(i,j,:,:) = [ones(1, num_points) * ((i - 1) - half_length); 
+                         ones(1, num_points) * ((j - 1) - half_length);
                          z;
                          ones(1, num_points)];
     end
@@ -134,7 +134,7 @@ end
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Figure 1 - 3D Cubic Grid & Cylinder
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-f1 = figure('Name', '3D Cubic Grid & Cylinder Projection', 'Color', 'w');
+fig_1 = figure('Name', '3D Cubic Grid & Cylinder Projection', 'Color', 'w');
 axis vis3d equal off
 axis([-1, 1, -1, 1, -1, 1] * 10);
 hold on
@@ -149,7 +149,7 @@ alpha 0.05
 
 % center of the reference system and center of the cubic grid
 plot3(0, 0, 0, '*')
-plot3(d(1), d(2), d(3), '*')
+plot3(position(1), position(2), position(3), '*')
 
 for i = 1:max_index
     for j = 1:max_index
@@ -180,7 +180,7 @@ end
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 %  Figura 2 - 2D Perspective Grid
 % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-f2 = figure('Name', '2D Projection', 'Color', 'w');
+fig_2 = figure('Name', '2D Projection', 'Color', 'w');
 axis equal
 axis([-pi, pi, -pi/2, pi/2]);
 hold on

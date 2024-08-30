@@ -1,5 +1,5 @@
-## Cylindrical Perspective
-This MATLAB script allows obtaining a two-dimensional grid to represent a three-dimensional scene in cylindrical perspective. 
+## Cylindrical Perspective Grid Generator
+This MATLAB script generates a two-dimensional grid to represent a three-dimensional scene in cylindrical perspective. 
 
 The user can modify the position (`position`), orientation (`rot_axis`, `rot_angle`), and size (`half_length`) of a cubic grid with respect to a cylinder of a specified radius (`radius`) used as a projection surface.
 
